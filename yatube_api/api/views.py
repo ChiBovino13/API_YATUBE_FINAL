@@ -1,14 +1,16 @@
 from django.shortcuts import get_object_or_404
-from posts.models import Group, Post, User
-from rest_framework import permissions, viewsets, filters, mixins
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework import filters, mixins, permissions, viewsets
 from rest_framework.pagination import LimitOffsetPagination
-from api.permissions import IsAuthorOrReadOnlyPermission
-from api.serializers import (
-    CommentSerializer, FollowSerializer, GroupSerializer, PostSerializer)
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+from .permissions import IsAuthorOrReadOnlyPermission
+from .serializers import (CommentSerializer, FollowSerializer, GroupSerializer,
+                          PostSerializer)
+from posts.models import Group, Post, User
 
 
 class PostViewSet(viewsets.ModelViewSet):
+    """Описание операций, выполняемых с публикациями."""
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [
@@ -22,6 +24,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    """Описание операций, выполняемых с комментариями."""
     serializer_class = CommentSerializer
     permission_classes = [
         IsAuthenticatedOrReadOnly,
@@ -46,6 +49,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
+    """Описание операций, выполняемых с группами."""
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [IsAuthorOrReadOnlyPermission]
@@ -56,6 +60,7 @@ class FollowViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet
 ):
+    """Описание операций, выполняемых с подписками."""
     serializer_class = FollowSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter]
