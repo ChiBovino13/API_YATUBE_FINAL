@@ -112,4 +112,4 @@ POST /api/v1/jwt/create/
 Authorization: Bearer {your_token}
 ```
 
-**А̳в̳т̳о̳р̳:̳** [Дарья Горячева](https://github.com/ChiBovino13)
+**♘😈  Автор:  ♙🎉** [Дарья Горячева](https://github.com/ChiBovino13)
