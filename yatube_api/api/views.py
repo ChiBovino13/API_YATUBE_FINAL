@@ -1,22 +1,22 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import filters, mixins, permissions, viewsets
+from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .permissions import IsAuthorOrReadOnlyPermission
-from .serializers import (CommentSerializer, FollowSerializer, GroupSerializer,
-                          PostSerializer)
-from posts.models import Group, Post, User
+from api.permissions import IsAuthorOrReadOnlyPermission
+from api.serializers import (CommentSerializer, FollowSerializer,
+                             GroupSerializer, PostSerializer)
+from posts.models import Group, Post
 
 
 class PostViewSet(viewsets.ModelViewSet):
     """Описание операций, выполняемых с публикациями."""
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [
+    permission_classes = (
         IsAuthenticatedOrReadOnly,
         IsAuthorOrReadOnlyPermission
-    ]
+    )
     pagination_class = LimitOffsetPagination
 
     def perform_create(self, serializer):
@@ -26,10 +26,10 @@ class PostViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     """Описание операций, выполняемых с комментариями."""
     serializer_class = CommentSerializer
-    permission_classes = [
+    permission_classes = (
         IsAuthenticatedOrReadOnly,
-        IsAuthorOrReadOnlyPermission
-    ]
+        IsAuthorOrReadOnlyPermission,
+    )
 
     def perform_create(self, serializer):
         post = get_object_or_404(
@@ -52,7 +52,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     """Описание операций, выполняемых с группами."""
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = [IsAuthorOrReadOnlyPermission]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class FollowViewSet(
@@ -67,8 +67,7 @@ class FollowViewSet(
     search_fields = ['following__username']
 
     def get_queryset(self):
-        user = get_object_or_404(User, username=self.request.user.username)
-        return user.follower
+        return self.request.user.follower
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
