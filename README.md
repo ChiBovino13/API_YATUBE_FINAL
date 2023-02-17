@@ -69,25 +69,31 @@ GET api/v1/{post_id}/comments/{id}/ - конкретный комментари�
 ## Примеры запросов и ответов
 
 ### Создание поста:
-```
+```JSON
 POST /api/v1/posts/
+```
 в body
+
+```JSON
 
 {
 "text": "string"
 }
 ```
 ### Обновление поста:
-```
+```JSON
 PUT /api/v1/posts/{id}/
+```
 в body
+
+```JSON
 
 {
 "text": "string1"
 }
 ```
 ### Удаление поста:
-```
+```JSON
 DEL /api/v1/posts/{id}/
 ```
 
@@ -101,14 +107,18 @@ username: admin
 password: admin
 ```
 Получить токен через postman:
-```
+```JSON
 POST /api/v1/jwt/create/
+```
 В body:
+```JSON
 {
 "username": "admin",
 "password": "admin"
 }
+```
 Полученный токен добавляем в headers (postman), после чего буду доступны все функции проекта:
+```JSON
 Authorization: Bearer {your_token}
 ```
 

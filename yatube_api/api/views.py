@@ -52,7 +52,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     """Описание операций, выполняемых с группами."""
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 
 class FollowViewSet(
@@ -62,9 +62,9 @@ class FollowViewSet(
 ):
     """Описание операций, выполняемых с подписками."""
     serializer_class = FollowSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['following__username']
+    permission_classes = (permissions.IsAuthenticated, )
+    filter_backends = (filters.SearchFilter, )
+    search_fields = ('following__username', )
 
     def get_queryset(self):
         return self.request.user.follower
